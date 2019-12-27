@@ -1,5 +1,4 @@
 # MoneyCoreNews
-<<<<<<< HEAD
 # MoneyCoreNews Web site
 Installation, Configuration& Deployment
 
