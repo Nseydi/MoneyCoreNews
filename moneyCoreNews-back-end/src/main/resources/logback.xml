@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!--<include resource="org/springframework/boot/logging/logback/base.xml"/> -->
+	<property name="LOG_PATH" value="../../../moneyCoreNews/Media/Logs" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				   %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
+			</pattern>
+		</encoder>
+	</appender>
+<!--  -->
+	<appender name="LogAnyFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/log_any.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				 %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
+			</Pattern>
+		</encoder>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily & on size -->
+			<maxFileSize>10MB</maxFileSize>
+			<fileNamePattern>
+				${LOG_PATH}/archived_logAny/log_any_%d{dd-MM-yyyy}_%i.log
+			</fileNamePattern>
+			<maxHistory>10</maxHistory>
+			<totalSizeCap>100MB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="ApiFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/log_api.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+		   %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
+			</Pattern>
+		</encoder>
+
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily & on size -->
+			<maxFileSize>10MB</maxFileSize>
+			<fileNamePattern>
+				${LOG_PATH}/archived_api/log_api%d{dd-MM-yyyy}_%i.log
+			</fileNamePattern>
+			<maxHistory>10</maxHistory>
+			<totalSizeCap>100MB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="ResponseFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/log_response.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+			 %d{yyyy-MM-dd HH:mm:ss.SSS}  : %m%n%ex
+			</Pattern>
+		</encoder>
+
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily & on size -->
+			<maxFileSize>10MB</maxFileSize>
+			<fileNamePattern>
+				${LOG_PATH}/archived_response/log_response_%d{dd-MM-yyyy}_%i.log
+			</fileNamePattern>
+			<maxHistory>10</maxHistory>
+			<totalSizeCap>100MB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+<appender name="PersistanceFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/log_dao.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+			 %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
+			</Pattern>
+		</encoder>
+
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily & on size -->
+			<maxFileSize>10MB</maxFileSize>
+			<fileNamePattern>
+				${LOG_PATH}/archived_dao/log_dao_%d{dd-MM-yyyy}_%i.log
+			</fileNamePattern>
+			<maxHistory>10</maxHistory>
+			<totalSizeCap>100MB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+	<!--<root level="debug"> -->
+	<root level="OFF">
+		<appender-ref ref="STDOUT" />
+	<!--	<appender-ref ref="SAVE-TO-FILE1" />  -->
+	</root>
+	<logger name="com.kakoo" additivity="false" level="debug">
+		<appender-ref ref="LogAnyFile" />
+	</logger>
+
+	<logger name="com.kakoo.api" additivity="false" level="debug">
+		<appender-ref ref="ApiFile" />
+	</logger>
+	<logger name="org.hibernate">
+		<level value="ALL" />
+		<appender-ref ref="PersistanceFile" />
+	</logger>
+	 <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
+		<level value="DEBUG" />
+		<appender-ref ref="ApiFile" />
+	</logger>
+	
+	 <logger name="com.kakoo.configuration.HttpLoggingFilter">
+		<level value="DEBUG" />
+		<appender-ref ref="ResponseFile" />
+	</logger>
+
+    <logger name="org.springframework" level="WARN">
+    <appender-ref ref="ApiFile" />
+    </logger>
+    <logger name="org.springframework.transaction" level="WARN">
+     <appender-ref ref="ApiFile" />
+    </logger>
+
+    <!-- in order to debug some marshalling issues, this needs to be TRACE -->
+    <logger name="org.springframework.web.servlet.mvc" level="WARN">
+     <appender-ref ref="ApiFile" />
+    </logger>
+	
+</configuration>
